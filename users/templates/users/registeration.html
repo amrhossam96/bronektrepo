@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "users/css/landing.css" %}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+    <title>Bronekt</title>
+</head>
+<body>
+
+     <div class="container">
+        <h1 class="logo-header">b&lt;onekt</h1>
+        <h4 class="header-intro-text">Register now</h4>
+        <form method="POST">
+            <div class="row">
+                <label for="username">Username</label>
+                <input autocomplete="off" class="input-field" type="text" name="username" id="username" placeholder="Username" >
+            </div>
+
+            <div class="row">
+                <label for="first_name">First Name</label>
+                <input autocomplete="off" class="input-field" type="text" name="first_name" id="first_name" placeholder="First Name" >
+            </div>
+
+            <div class="row">
+                <label for="last_name">Last Name</label>
+                <input autocomplete="off" class="input-field" type="text" name="last_name" id="last_name" placeholder="Last Name"  >
+            </div>
+            <div class="row">
+                <label for="email">Email</label>
+                <input autocomplete="off" class="input-field" type="email" name="email" id="email" placeholder="Email" >
+            </div>
+
+            <div class="row">
+                <label for="password">Password</label>
+                <input class="input-field" type="password" name="password" id="password" placeholder="Passowrd" >
+            </div>
+
+            <div class="row">
+                <label for="passowrd2">Confirm Password</label>
+                <input class="input-field" type="password" id="passowrd2" placeholder="Confirm Password" >
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" id="sign-up-btn">Sign Up!</button>
+            <p class="sign-in-prompt">Already have an account?<a href="#"> log in</a> instead</p>
+        </form>
+     </div>
+    <script src="{% static "users/js/register.js" %}"></script>
+</body>
+</html>
