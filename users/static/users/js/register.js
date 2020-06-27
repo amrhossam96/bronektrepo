@@ -55,7 +55,7 @@ function hookUpBtns(){
       'username':document.getElementById('username').value,
       'first_name':document.getElementById('first_name').value,
       'last_name':document.getElementById('last_name').value,
-      // 'email':document.getElementById('email').value,
+      'email':document.getElementById('email').value,
       'password':document.getElementById('password').value,
     };
     postData('http://127.0.0.1:8000/',data);
