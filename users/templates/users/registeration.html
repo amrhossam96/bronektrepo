@@ -17,6 +17,7 @@
         <h1 class="logo-header">b&lt;onekt</h1>
         <h4 class="header-intro-text">Register now</h4>
         <form method="POST">
+        {%csrf_token%}
             <div class="row">
                 <label for="username">Username</label>
                 <input autocomplete="off" class="input-field" type="text" name="username" id="username" placeholder="Username" >
@@ -49,6 +50,7 @@
             <p class="sign-in-prompt">Already have an account?<a href="#"> log in</a> instead</p>
         </form>
      </div>
+
     <script src="{% static "users/js/register.js" %}"></script>
 </body>
 </html>
