@@ -84,9 +84,9 @@
                         </div>
         
                         <div class="profile-card-right">
-                            <h1 class="display-name">User</h1>
-                            <h2 class="user-name">@Username</h2>
-                            <h4 class="user-bio">Lorem ipsum dolor sit, amet consectetur adipisicing elit.</h4>
+                            <h1 class="display-name">{{request.user.first_name}}</h1>
+                            <h2 class="user-name">@{{request.user.username}}</h2>
+                            <h4 class="user-bio">{{user.profile.bio}}</h4>
                             <ul class="user-info">
                                 <li class="info-li red">BroCodes</li>
                                 <li class="info-li red">Bros</li>
