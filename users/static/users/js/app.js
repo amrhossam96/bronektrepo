@@ -27,7 +27,25 @@ function hookUpBtns(){
     const shareMenu = document.querySelector('.share-menu');
     const crossSignShare = document.getElementById('cross-sign-share');
     const copyProfileLinkBtn = document.getElementById('copy-profile-link');
+    const profileOptions = document.getElementById('profile-options');
+    const cancelSignOutBtn = document.getElementById('logout-cancel-btn');
 
+
+
+
+
+    cancelSignOutBtn.addEventListener('click',()=>{
+        const signOutPrompt = document.getElementById('sign-out-prompt');
+        signOutPrompt.classList.toggle('sign-out-blob-disappear');
+        overlay.classList.toggle('over-active');
+    });
+
+
+    profileOptions.addEventListener('click',()=>{
+        const signOutPrompt = document.getElementById('sign-out-prompt');
+        signOutPrompt.classList.toggle('sign-out-blob-disappear');
+        overlay.classList.toggle('over-active');
+    });
 
 
 

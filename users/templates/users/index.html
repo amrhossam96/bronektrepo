@@ -73,6 +73,16 @@
         
                 <div class="profile-card">
         
+                        <div id="profile-options">
+                            <div class="option-dots noselect"></div>
+                            <div class="option-dots noselect"></div>
+                            <div class="option-dots noselect"></div>
+                        </div>
+
+                        
+
+
+
                         <div class="profile-card-left">
                             <div class="profile-picture-placeholder">
                                 <img src="https://holmesbuilders.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png" alt="profile-picture" class="profile-picture-content">
@@ -181,6 +191,13 @@
         </div>
     </div>
 
+
+
+    <div id="sign-out-prompt" class="sign-out-prompt sign-out-blob-disappear">
+        <h3 id="logout-prompt-text" class="noselect">Do you really want to log out ?</h3>
+        <a class="noselect" id="logout-btn" href="{% url 'logout' %}">Logout</a>
+        <a class="noselect" id="logout-cancel-btn" href="#">Cancel</a>
+    </div>
     
     <nav class="bottom-navigation-bar">
         <ul class="navigation-list">

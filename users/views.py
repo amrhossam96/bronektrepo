@@ -54,19 +54,19 @@ def home(request):
 
     if request.method == "POST":
         post_body = request.POST['post-body']
-        post = Post(author= request.user, post_body = post_body)
+        post = Brocode(author= request.user, brocode_body = post_body)
         post.save()
 
     user = User.objects.get(username=request.user)
-    brocode = user.brocode_set.all().order_by('-created')
+    brocodes = user.brocode_set.all().order_by('-created')
     profile = Profile.objects.get(user=request.user)
     follows = profile.follows.all()
-    context = {'posts':posts,'follows':follows,}
+    context = {'posts':brocodes,'follows':follows,}
     return render(request,'users/index.html',context)
 
 def logout_page(request):
     logout(request)
-    return HttpResponse("<h1>Logged Out successfully</h1>")
+    return render(request,'users/logout.html',{})
 
 
 def login_page(request):
@@ -84,4 +84,4 @@ def login_page(request):
     context = {
         'form':form,
     }
-    return render(request,'user/login.html',context)
+    return render(request,'users/login.html',context)

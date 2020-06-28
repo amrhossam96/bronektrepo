@@ -28,9 +28,18 @@ class UserRegistrationForm(ModelForm):
 
 
 class UserLoginForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'input-field','autocomplete':'off','placeholder':'Username'})
+        self.fields['password'].widget.attrs.update({'class': 'input-field','autocomplete':'off','placeholder':'Password'})
+        
+
     class Meta:
         model = User
         fields = ['username','password']
         widgets = {
             'password':forms.PasswordInput(),
+        }
+        help_texts = {
+            'username':None
         }

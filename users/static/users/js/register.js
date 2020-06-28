@@ -1,7 +1,4 @@
 let ps = document.getElementsByTagName('p');
-let submitBtn = document.getElementsByTagName('button').item(0);
-
-submitBtn.id = 'sign-up-btn';
 
 
 

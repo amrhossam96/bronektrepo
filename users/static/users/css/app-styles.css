@@ -143,6 +143,7 @@ html {
     border-radius: 15px;
     padding-bottom: 10px;
     height: fit-content;
+    position: relative;
 }
 
 
@@ -718,4 +719,73 @@ label {
 #mic-menu-close{
     transform: translateX(1.5em);
     transform: translateY(1.5em);
+}
+
+
+#profile-options {
+    position: absolute;
+    top: 10px;
+    right: 1.2em;
+    cursor: pointer;
+}
+
+.option-dots {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: rgb(228, 47, 47);
+    margin: 3px;
+}
+
+.sign-out-prompt {
+    width: 90%;
+    height: 200px;
+    background-color: #2d2d2d;
+    border-radius: 25px;
+    position: fixed;
+    z-index: 100;
+    text-align: center;
+    transition: top 0.3s;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    top: 50vh;
+}
+
+#logout-btn:link,
+#logout-btn:visited {
+    color: #fff;
+}
+
+#logout-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: rgb(228, 47, 47);
+    color: #fff;
+    border: 1px solid rgba(0,0,0,0);
+}
+
+#logout-prompt-text {
+    color: #fff;
+    margin: 2em;
+}
+
+
+#logout-cancel-btn:hover {
+    background-color: rgb(228,47,47);
+}
+
+#logout-cancel-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-color: #2d2d2d;
+    color: #fff;
+    border: 1px solid rgb(228,47,47);
+    transition: background-color 0.3s;
+}
+
+
+.sign-out-blob-disappear {
+    top: 150vh;
 }
