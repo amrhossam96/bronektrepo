@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+import datetime
 
 class Brocode(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -11,14 +12,15 @@ class Brocode(models.Model):
 
 
     def __str__(self):
-        return self.post_body[:15]+"...."
-
+        return self.brocode_body
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
+    display_name = models.CharField(max_length=50, null=True, blank=True, default= "")
     bio = models.CharField(max_length=100, blank=True)
-    follows = models.ManyToManyField('self', related_name='follows_list', symmetrical=False, blank=True)
-    followers = models.ManyToManyField('self', related_name='followers_list', symmetrical=False, blank=True)
+    email = models.EmailField(max_length=120, default='')
+    birthday = models.DateTimeField(default= datetime.date(1990,1,1))
+
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -28,4 +30,8 @@ class Profile(models.Model):
 def create_profile(sender,instance,created,**kwargs):
     if created:
         profile = Profile(user=instance)
+        profile.email = profile.user.email
         profile.save()
+
+
+

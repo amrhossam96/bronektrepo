@@ -104,19 +104,25 @@ function hookUpBtns(){
         try{
 
             elem.addEventListener('change',()=>{
-                elem.parentElement.getElementsByTagName('label').item(0).innerText = 
-                elem.value;
+                elem.parentElement.getElementsByTagName('label').item(0).innerText = elem.value;
                 elem.value = '';
             });
         }catch(error){}
+
     });
 
     bronektBtn.addEventListener('click',()=>{
         const bronektComposingArea = document.getElementById('brocode-composing-area');
         if(bronektComposingArea.value.length>0){
-            const brocode = createNewBrocode(bronektComposingArea.value);
+
+            let bronektData = {
+                'brocode-body': bronektComposingArea.value
+            };
+            postData('/user/api/post_brocode',bronektData).then(response => {
+                let brocode = createNewBrocode(response);
+                newFeedsContainer.insertAdjacentHTML('afterbegin',brocode);
+            });
             bronektComposingArea.value='';
-            newFeedsContainer.insertAdjacentHTML('afterbegin',brocode);
         }
     });
     
@@ -131,6 +137,7 @@ function hookUpBtns(){
         editMenu.classList.toggle('menu-shower');
         editMenu.classList.toggle('menu-hider');
         overlay.classList.toggle('over-active');
+        getProfileData();
     });
     
     var prevScrollpos = 0;
@@ -183,7 +190,7 @@ function hookUpBtns(){
 }
 
 function createNewBrocode(brocode){
-    brocode = brocode.replace(/\n/g,'<br>');
+    // brocode = brocode['brocode-body'].replace(/\n/g,'<br>');
     let brocodeTemplate = `<div class="tweet">
     <div class="tweet-container-left-col">
         <div class="tweet-author-picture-container">
@@ -192,11 +199,11 @@ function createNewBrocode(brocode){
     </div>
     <div class="tweet-container-right-col">
         <div class="tweet-card-header">
-            <div class="tweet-author-display-name">User</div>
-            <div class="tweet-author-username">@Username</div>
+            <div class="tweet-author-display-name">${brocode['author-display-name']}</div>
+            <div class="tweet-author-username">@${brocode['author']}</div>
         </div>     
         <div class="tweet-content">
-            <p class="tweet-content-p">${brocode}</p>
+            <p class="tweet-content-p">${brocode['brocode_body']}</p>
         </div>
         <ul class="brocodes-action-btns">
             <li class="brocode-action-btn"><span class="material-icons action-icon">reply</span></li><!--
@@ -209,5 +216,82 @@ function createNewBrocode(brocode){
 
     return brocodeTemplate;
 }
+
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+
+async function postData(url = '', myData = {}) {
+
+      const response = await fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-type':'application/json',
+          'X-CSRFToken':getCookie('csrftoken'),
+        },
+        body:JSON.stringify(myData)
+      });
+      return response.json();
+  }
+
+  function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+
+
+function getProfileData(){
+    fetch('/user/api/profile_data')
+  .then(response => response.json())
+  .then(data =>{
+      console.log(data);
+      let editLabelName = document.getElementById('edit-label-display-name');
+      let editLabelEmail = document.getElementById('edit-label-email');
+      let editLabelBio = document.getElementById('edit-label-bio');
+      let editLabelDateOfBirth = document.getElementById('dateofbirth');
+    
+      if(data['bio']!==''){
+        editLabelName.innerText = data['display_name'];
+      }
+      editLabelEmail.innerText = data['email'];
+      if(data['bio']!==''){
+        editLabelBio.innerText = data['bio'];
+      }
+      let date = new Date(data['birthday']);
+      let year = date.getFullYear().toString();
+      let month = (date.getMonth()+1).toString().padStart(2,'0');
+      let day = (date.getDay()).toString().padStart(2,'0');
+      let dateString = [year,month,day].join('-');
+      editLabelDateOfBirth.value = dateString;
+  });
+
+}
+
+
+
 
 window.onload = setupApp;

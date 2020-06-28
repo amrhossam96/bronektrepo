@@ -24,12 +24,13 @@
             {% csrf_token %}
             {{form.as_p}}
             <button id="sign-up-btn" type="submit">Register</button>
-            <p class="sign-in-prompt">Already have an account?<a href="{% url 'login' %}"> log in</a> instead</p>
+            <p class="sign-in-prompt">Already have an account?<a target="_self" href="{% url 'login' %}"> log in</a> instead</p>
         </form>
     </div>
 
 
 
     <script src="{% static "users/js/register.js" %}"></script>
+   
 </body>
 </html>
