@@ -1,5 +1,6 @@
 const setupApp = ()=>{
     hookUpBtns();
+    // startTimeline();
 }
 
 var displayName = document.querySelector('.display-name').innerText;
@@ -331,7 +332,7 @@ function getProfileData(){
     fetch('/user/api/profile_data')
   .then(response => response.json())
   .then(data =>{
-      console.log(data);
+    //   console.log(data);
       let editLabelName = document.getElementById('edit-label-display-name');
       let editLabelEmail = document.getElementById('edit-label-email');
       let editLabelBio = document.getElementById('edit-label-bio');
@@ -355,6 +356,19 @@ function getProfileData(){
 }
 
 
+function getBrocodes(){
+    fetch('/user/api/get_brocodes')
+  .then(response => response.json())
+  .then(data =>{
+      console.log(data);
+  });
+}
 
+
+function startTimeline(){
+    window.setInterval(()=>{
+        getBrocodes();
+    },3000);
+}
 
 window.onload = setupApp;

@@ -11,6 +11,7 @@ def response(request):
     return JsonResponse(serializer.data, safe=False)
 
 def post_brocode(request):
+
     if(request.user.is_authenticated):
         brocode_body = json.loads(request.body)['brocode-body']
         brocode_author = request.user
@@ -21,3 +22,9 @@ def post_brocode(request):
         response['author'] = request.user.username
         response['author-display-name'] = request.user.profile.display_name
         return JsonResponse(response, safe=False)
+
+def get_brocodes(requests):
+    if (requests.method == "GET"):
+        brocodes = Brocode.objects.all().order_by('-created')[:3]
+        serializer = BroCodeSerializer(brocodes, many=True)
+        return JsonResponse(serializer.data,safe=False)
