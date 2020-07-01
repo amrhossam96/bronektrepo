@@ -5,6 +5,7 @@ const setupApp = ()=>{
 
 var displayName = document.querySelector('.display-name').innerText;
 function hookUpBtns(){
+
     const lineStartings = [0,20,40,60,80];
     const pageStartings = [0,-100,-200,-300,-400];
     const underline = document.querySelector(".underline");
@@ -31,9 +32,8 @@ function hookUpBtns(){
     const copyProfileLinkBtn = document.getElementById('copy-profile-link');
     const profileOptions = document.getElementById('profile-options');
     const cancelSignOutBtn = document.getElementById('logout-cancel-btn');
-    
+    const timeline = document.querySelector('.timeline');
     const insertEmojiIcon = document.getElementById('insert-emoji-icon');
-
 
 
     insertEmojiIcon.addEventListener('click',()=>{
@@ -61,13 +61,11 @@ function hookUpBtns(){
         }
     });
 
-
     cancelSignOutBtn.addEventListener('click',()=>{
         const signOutPrompt = document.getElementById('sign-out-prompt');
         signOutPrompt.classList.toggle('sign-out-blob-disappear');
         overlay.classList.toggle('over-active');
     });
-
 
     profileOptions.addEventListener('click',()=>{
         const signOutPrompt = document.getElementById('sign-out-prompt');
@@ -75,17 +73,12 @@ function hookUpBtns(){
         overlay.classList.toggle('over-active');
     });
 
-
-
     copyProfileLinkBtn.addEventListener('click',()=>{
         const link = document.getElementById('share-link');
         link.select();
         link.setSelectionRange(0,99999);
         document.execCommand('copy');
     });
-
-
-
 
     crossSignShare.addEventListener('click',()=>{
         shareMenu.classList.toggle('menu-hider');
@@ -141,7 +134,6 @@ function hookUpBtns(){
                 };
             };
 
-
             reader.readAsDataURL(inputPhoto.files[0]);
         });
     });
@@ -150,7 +142,6 @@ function hookUpBtns(){
     editInputs.forEach((elem)=>{
         
         try{
-
             elem.addEventListener('change',()=>{
                 elem.parentElement.getElementsByTagName('label').item(0).innerText = elem.value;
                 elem.value = '';
@@ -166,8 +157,13 @@ function hookUpBtns(){
                 'brocode-body': bronektComposingArea.value
             };
             postData('/user/api/post_brocode',bronektData).then(response => {
-                let brocode = createNewBrocode(response);
-                newFeedsContainer.insertAdjacentHTML('afterbegin',brocode);
+                let brocodeDiv = document.createElement('div');
+                brocodeDiv.setAttribute('class','tweet');
+                brocodeDiv.innerHTML = createNewBrocode(response);
+                timeline.insertAdjacentElement('afterbegin',brocodeDiv);
+                newFeedsContainer.insertAdjacentElement('afterbegin',brocodeDiv.cloneNode(true));
+
+                
             });
             bronektComposingArea.value='';
 
@@ -253,9 +249,13 @@ function hookUpBtns(){
     }
 }
 
+
 function createNewBrocode(brocode){
     // brocode = brocode['brocode-body'].replace(/\n/g,'<br>');
-    let brocodeTemplate = `<div class="tweet">
+
+
+
+    let brocodeTemplate = `
     <div class="tweet-container-left-col">
         <div class="tweet-author-picture-container">
             <img src="https://holmesbuilders.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png" alt="" class="profile-header-img">
@@ -272,11 +272,10 @@ function createNewBrocode(brocode){
         <ul class="brocodes-action-btns">
             <li class="brocode-action-btn"><span class="material-icons action-icon">reply</span></li><!--
             --><li class="brocode-action-btn"><span class="material-icons action-icon">thumbs_up_down</span></li><!--
-            --><li class="brocode-action-btn"><span class="material-icons action-icon">favorite</span></li><!--
+            --><li class="brocode-action-btn"><span class="material-icons action-icon "onclick=\"toggleLike(this)\">favorite</span></li><!--
             --><li class="brocode-action-btn"><span class="material-icons action-icon">share</span></li>
         </ul>
-    </div>
- </div>`;
+    </div>`;
 
     return brocodeTemplate;
 }

@@ -760,3 +760,7 @@
     .upload-image-content {
         width: 120px;
     }
+
+    .liked {
+        color: #e42f2f;
+    }

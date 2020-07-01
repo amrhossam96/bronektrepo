@@ -9,7 +9,7 @@ class Brocode(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     brocode_body = models.TextField(blank=False)
     created = models.DateTimeField(auto_now_add=True)
-
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.brocode_body

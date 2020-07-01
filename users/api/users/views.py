@@ -28,3 +28,15 @@ def get_brocodes(requests):
         brocodes = Brocode.objects.all().order_by('-created')[:3]
         serializer = BroCodeSerializer(brocodes, many=True)
         return JsonResponse(serializer.data,safe=False)
+
+def like_brocode(requests, brocode_id):
+    brocode = Brocode.objects.get(id=brocode_id)
+    brocode.likes +=1
+    serializer = BroCodeSerializer(brocode)
+    return JsonResponse(serializer.data,safe=False)
+
+def unlike_brocode(requests, brocode_id):
+    brocode = Brocode.objects.get(id=brocode_id)
+    brocode.likes -=1
+    serializer = BroCodeSerializer(brocode)
+    return JsonResponse(serializer.data,safe=False)
