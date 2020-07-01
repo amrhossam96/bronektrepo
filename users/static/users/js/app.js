@@ -169,11 +169,20 @@ function hookUpBtns(){
                 newFeedsContainer.insertAdjacentHTML('afterbegin',brocode);
             });
             bronektComposingArea.value='';
-            let emojiDiv = document.querySelector('.emoji-div');
-            emojiDiv.parentNode.removeChild(emojiDiv);
+
             let ca = document.querySelector('.brocode-composing-area');
             ca.style.borderBottomRightRadius = '13px';
             ca.style.borderBottomLeftRadius = '13px';
+            if(document.querySelector('.emoji-div')){
+                let emojiDiv = document.querySelector('.emoji-div');
+                emojiDiv.parentNode.removeChild(emojiDiv);
+            }
+            // image-upload-placeholder remove
+            if(document.querySelector('.image-upload-placeholder')){
+                let imageDiv = document.querySelector('.image-upload-placeholder');
+                imageDiv.parentNode.removeChild(imageDiv);
+            }
+
         }
         else {
             // do nothing
