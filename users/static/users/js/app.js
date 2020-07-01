@@ -2,6 +2,7 @@ const setupApp = ()=>{
     hookUpBtns();
 }
 
+var displayName = document.querySelector('.display-name').innerText;
 function hookUpBtns(){
     const lineStartings = [0,20,40,60,80];
     const pageStartings = [0,-100,-200,-300,-400];
@@ -29,9 +30,35 @@ function hookUpBtns(){
     const copyProfileLinkBtn = document.getElementById('copy-profile-link');
     const profileOptions = document.getElementById('profile-options');
     const cancelSignOutBtn = document.getElementById('logout-cancel-btn');
+    
+    const insertEmojiIcon = document.getElementById('insert-emoji-icon');
 
 
 
+    insertEmojiIcon.addEventListener('click',()=>{
+        if(!document.querySelector('.emoji-div')){
+            let menuDiv = document.createElement('div');
+            let emojiList = document.createElement('ul');
+            menuDiv.setAttribute('class','emoji-div');
+            emojiList.setAttribute('class','emoji-list');
+            let number = 0x1F600;
+            for(let i=0;i<80;i++){
+                let li = document.createElement('li');
+                li.setAttribute('class','emoji-list-item');
+                li.innerHTML = `&#x${number.toString(16)};`;
+                li.addEventListener('click',(item)=>{
+                    document.getElementById('brocode-composing-area').value+= li.innerHTML;
+                });
+                emojiList.appendChild(li);
+                number++;
+            }
+            menuDiv.appendChild(emojiList);
+            newFeedsContainer.insertAdjacentElement('beforebegin',menuDiv);
+            let ca = document.querySelector('.brocode-composing-area');
+            ca.style.borderBottomRightRadius = "0px";
+            ca.style.borderBottomLeftRadius = "0px";
+        }
+    });
 
 
     cancelSignOutBtn.addEventListener('click',()=>{
@@ -114,7 +141,6 @@ function hookUpBtns(){
     bronektBtn.addEventListener('click',()=>{
         const bronektComposingArea = document.getElementById('brocode-composing-area');
         if(bronektComposingArea.value.length>0){
-
             let bronektData = {
                 'brocode-body': bronektComposingArea.value
             };
@@ -123,6 +149,14 @@ function hookUpBtns(){
                 newFeedsContainer.insertAdjacentHTML('afterbegin',brocode);
             });
             bronektComposingArea.value='';
+            let emojiDiv = document.querySelector('.emoji-div');
+            emojiDiv.parentNode.removeChild(emojiDiv);
+            let ca = document.querySelector('.brocode-composing-area');
+            ca.style.borderBottomRightRadius = '13px';
+            ca.style.borderBottomLeftRadius = '13px';
+        }
+        else {
+            // do nothing
         }
     });
     
@@ -199,7 +233,7 @@ function createNewBrocode(brocode){
     </div>
     <div class="tweet-container-right-col">
         <div class="tweet-card-header">
-            <div class="tweet-author-display-name">${brocode['author-display-name']}</div>
+            <div class="tweet-author-display-name">${brocode['author-display-name']==""?displayName:brocode['author-display-name']}</div>
             <div class="tweet-author-username">@${brocode['author']}</div>
         </div>     
         <div class="tweet-content">
