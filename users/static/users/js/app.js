@@ -123,6 +123,26 @@ function hookUpBtns(){
     insertPhotoBtn.addEventListener('click',()=>{
         const inputPhoto = document.getElementById("insert-img-btn");
         inputPhoto.click();
+        inputPhoto.addEventListener('change',()=>{
+            const reader = new FileReader();
+            reader.onload = ()=> {
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = ()=> {
+                    img.setAttribute('class','upload-image-content')
+                    let imageUploadPlaceHolder = document.createElement('div');
+                    imageUploadPlaceHolder.setAttribute('class','image-upload-placeholder');
+                    newFeedsContainer.insertAdjacentElement('afterbegin',imageUploadPlaceHolder);
+                    let ca = document.querySelector('.brocode-composing-area');
+                    ca.style.borderBottomRightRadius = "0px";
+                    ca.style.borderBottomLeftRadius = "0px";
+                    imageUploadPlaceHolder.appendChild(img);
+                };
+            };
+
+
+            reader.readAsDataURL(inputPhoto.files[0]);
+        });
     });
 
 
