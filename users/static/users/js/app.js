@@ -1,6 +1,5 @@
 const setupApp = () => {
   hookUpBtns();
-  // startTimeline();
 };
 
 var displayName = document.querySelector(".display-name").innerText;
@@ -45,7 +44,7 @@ function hookUpBtns() {
         let _html = "";
         response.forEach((elem) => {
           let elementTemplate = `
-                <div class="tweet">
+                <div class="entity-placeholder">
     <div class="tweet-container-left-col">
         <div class="tweet-author-picture-container">
             <img src="https://holmesbuilders.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png" alt="" class="profile-header-img">
@@ -358,7 +357,6 @@ function getProfileData() {
   fetch("/user/api/profile_data")
     .then((response) => response.json())
     .then((data) => {
-      //   console.log(data);
       let editLabelName = document.getElementById("edit-label-display-name");
       let editLabelEmail = document.getElementById("edit-label-email");
       let editLabelBio = document.getElementById("edit-label-bio");
@@ -388,10 +386,6 @@ function getBrocodes() {
     });
 }
 
-function startTimeline() {
-  window.setInterval(() => {
-    getBrocodes();
-  }, 3000);
-}
+
 
 window.onload = setupApp;

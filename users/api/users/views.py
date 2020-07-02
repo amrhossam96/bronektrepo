@@ -15,7 +15,7 @@ def post_brocode(request):
     if(request.user.is_authenticated):
         brocode_body = json.loads(request.body)['brocode-body']
         brocode_author = request.user
-        brocode = Brocode(author=brocode_author, brocode_body=brocode_body)
+        brocode = Brocode(author=brocode_author.profile, brocode_body=brocode_body)
         brocode.save()
         serializer = BroCodeSerializer(brocode)
         response = serializer.data

@@ -5,15 +5,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import datetime
 
-class Brocode(models.Model):
-    author       = models.ForeignKey(User, on_delete=models.CASCADE)
-    brocode_body = models.TextField(blank=False)
-    created      = models.DateTimeField(auto_now_add=True)
-    likes        = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.brocode_body
-
 
 
 
@@ -35,6 +26,20 @@ def create_profile(sender,instance,created,**kwargs):
         profile.email = profile.user.email
         profile.display_name = profile.user.first_name
         profile.save()
+
+
+class Brocode(models.Model):
+    author       = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    brocode_body = models.TextField(blank=False)
+    created      = models.DateTimeField(auto_now_add=True)
+    likes        = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.brocode_body
+
+
+
+
 
 
 class Following(models.Model):

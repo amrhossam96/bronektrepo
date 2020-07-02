@@ -212,7 +212,7 @@
     color:#e42f2f;
     }
     
-    .tweet {
+    .tweet, .entity-placeholder {
     background-color:#303030;
     border-radius:15px;
     padding:10px;
@@ -221,7 +221,6 @@
     width:99%;
     display:flex;
     overflow:hidden;
-    transition:height .3s;
     }
     
     .tweet-container-left-col {
