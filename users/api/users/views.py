@@ -23,20 +23,27 @@ def post_brocode(request):
         response['author-display-name'] = request.user.profile.display_name
         return JsonResponse(response, safe=False)
 
-def get_brocodes(requests):
-    if (requests.method == "GET"):
+def get_brocodes(request):
+    if (request.method == "GET"):
         brocodes = Brocode.objects.all().order_by('-created')[:3]
         serializer = BroCodeSerializer(brocodes, many=True)
         return JsonResponse(serializer.data,safe=False)
 
-def like_brocode(requests, brocode_id):
+def like_brocode(request, brocode_id):
     brocode = Brocode.objects.get(id=brocode_id)
     brocode.likes +=1
     serializer = BroCodeSerializer(brocode)
     return JsonResponse(serializer.data,safe=False)
 
-def unlike_brocode(requests, brocode_id):
+def unlike_brocode(request, brocode_id):
     brocode = Brocode.objects.get(id=brocode_id)
     brocode.likes -=1
     serializer = BroCodeSerializer(brocode)
+    return JsonResponse(serializer.data,safe=False)
+
+
+def search_users(request):
+    search_query = json.loads(request.body)['search-query']
+    profiles = Profile.objects.filter(display_name__startswith=search_query)
+    serializer = ProfileModelSerializer(profiles,many=True)
     return JsonResponse(serializer.data,safe=False)
