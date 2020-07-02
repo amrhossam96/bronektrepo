@@ -58,9 +58,9 @@ def home(request):
         post.save()
 
     user = User.objects.get(username=request.user)
-    brocodes = user.brocode_set.all().order_by('-created')
+    brocodes = user.profile.brocode_set.all().order_by('-created')
 
-    context = {}
+    context = {"brocodes":brocodes}
     return render(request,'users/index.html',context)
 
 def logout_page(request):
