@@ -2,7 +2,7 @@ from django.http import HttpResponse, JsonResponse
 import json
 from .serializers import ProfileModelSerializer, BroCodeSerializer
 from  ...models  import Profile, Brocode, Timeline
-import time
+import time, datetime
 
 def response(request):
     
@@ -25,10 +25,18 @@ def post_brocode(request):
         response['author-display-name'] = request.user.profile.display_name
         return JsonResponse(response, safe=False)
 
-def get_brocodes(request):
+def get_brocodes(request, timestamp):
     if (request.method == "GET"):
-        brocodes = Brocode.objects.all().order_by('-created')[:3]
-        serializer = BroCodeSerializer(brocodes, many=True)
+
+        datetime_ = datetime.datetime.fromtimestamp(float(timestamp)/1000)
+        personal_timeline = Timeline.objects.get(owner=request.user.profile)
+        retrived_brocodes = personal_timeline.brocodes_list.all().order_by('-created')[:30]
+        filtered_brocodes = []
+        for bc in retrived_brocodes:
+            if(int(bc.created.timestamp()) > int(timestamp)):
+                print(bc.created.timestamp())
+                filtered_brocodes.append(bc)
+        serializer = BroCodeSerializer(filtered_brocodes, many=True)
         return JsonResponse(serializer.data,safe=False)
 
 def like_brocode(request, brocode_id):

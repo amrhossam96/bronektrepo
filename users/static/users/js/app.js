@@ -303,6 +303,7 @@ function createNewBrocode(brocode) {
         <div class="tweet-content">
             <p class="tweet-content-p">${brocode["brocode_body"]}</p>
         </div>
+        <span hidden class="brocode-time">${new Date(brocode['created']).getTime()}</span>
         <ul class="brocodes-action-btns">
             <li class="brocode-action-btn"><span class="material-icons action-icon">reply</span></li><!--
             --><li class="brocode-action-btn"><span class="material-icons action-icon">thumbs_up_down</span></li><!--
@@ -379,15 +380,31 @@ function getProfileData() {
     });
 }
 
-function getBrocodes() {
-  fetch("/user/api/get_brocodes")
+function getBrocodes(timestamp) {
+  fetch(`/user/api/get_brocodes/${parseInt(timestamp)}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      if(data.length>0){
+        console.log(data);
+      }else{
+        console.log("No new brocodes");
+      }
     });
 }
 
 
+
+function startTimeLine(){
+  window.setInterval(()=>{
+    let timeline = document.querySelector(".newfeeds-container");
+    let latestBrocode = timeline.firstElementChild;
+    if(latestBrocode){
+      let queryTimestamp = latestBrocode.querySelector('.brocode-time').textContent;
+      getBrocodes(queryTimestamp);
+    }
+  },
+    3000);
+}
 
 
 window.onload = setupApp;

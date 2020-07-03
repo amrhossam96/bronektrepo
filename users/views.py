@@ -61,7 +61,7 @@ def home(request):
         user = User.objects.get(username=request.user)
     except:
         return redirect('register')
-    brocodes = user.profile.brocode_set.all().order_by('-created')
+    brocodes = user.profile.brocode_set.all().order_by('-created')[:3]
 
     context = {"brocodes":brocodes}
     return render(request,'users/index.html',context)
