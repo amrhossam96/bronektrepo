@@ -388,29 +388,6 @@ function getBrocodes() {
 }
 
 
-function startTimeLine(){
-  
-}
-
-
-class Brocode {
-  constructor(response){
-    this.id;
-    this.displayName;
-    this.username;
-    this.content;
-    this.state;
-  }
-
-
-  render(){
-    
-  }
-
-  delete(){
-
-  }
-};
 
 
 window.onload = setupApp;

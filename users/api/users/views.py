@@ -1,8 +1,8 @@
 from django.http import HttpResponse, JsonResponse
 import json
 from .serializers import ProfileModelSerializer, BroCodeSerializer
-from  ...models  import Profile, Brocode
-
+from  ...models  import Profile, Brocode, Timeline
+import time
 
 def response(request):
     
@@ -17,6 +17,8 @@ def post_brocode(request):
         brocode_author = request.user
         brocode = Brocode(author=brocode_author.profile, brocode_body=brocode_body)
         brocode.save()
+        personal_timeline = Timeline.objects.get(owner=brocode_author.profile)
+        personal_timeline.brocodes_list.add(Brocode.objects.get(id=brocode.id))
         serializer = BroCodeSerializer(brocode)
         response = serializer.data
         response['author'] = request.user.username

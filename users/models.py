@@ -37,9 +37,20 @@ class Brocode(models.Model):
     def __str__(self):
         return self.brocode_body
 
+class Timeline(models.Model):
+    owner           = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    brocodes_list   = models.ManyToManyField(Brocode, related_name="brocode_list")
+
+    def __str__(self):
+        return self.owner.display_name + " Timeline"
 
 
 
+@receiver(post_save,sender=Profile)
+def create_timeline(sender,instance,created,**kwargs):
+    if created:
+        timeline = Timeline(owner=instance)
+        timeline.save()   
 
 
 class Following(models.Model):

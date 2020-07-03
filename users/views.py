@@ -57,7 +57,10 @@ def home(request):
         post = Brocode(author= request.user, brocode_body = post_body)
         post.save()
 
-    user = User.objects.get(username=request.user)
+    try:
+        user = User.objects.get(username=request.user)
+    except:
+        return redirect('register')
     brocodes = user.profile.brocode_set.all().order_by('-created')
 
     context = {"brocodes":brocodes}
