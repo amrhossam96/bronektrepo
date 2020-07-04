@@ -15,6 +15,7 @@ class Profile(models.Model):
     bio             = models.CharField(max_length=100, blank=True)
     email           = models.EmailField(max_length=120, default='')
     birthday        = models.DateTimeField(default= datetime.date(1990,1,1))
+    slug            = models.CharField(max_length=100,null=True, blank=True)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -25,6 +26,7 @@ def create_profile(sender,instance,created,**kwargs):
         profile = Profile(user=instance)
         profile.email = profile.user.email
         profile.display_name = profile.user.first_name
+        profile.slug = profile.user.username
         profile.save()
 
 

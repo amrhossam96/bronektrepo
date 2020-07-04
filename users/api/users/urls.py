@@ -9,4 +9,5 @@ urlpatterns = [
     path('like_brocodes/<int:brocode_id>',views.like_brocode,name='like_response'),
     path('unlike_brocodes/<int:brocode_id>',views.unlike_brocode,name='unlike_response'),
     path('searchusers',views.search_users,name='search_users'),
+    path('profile/<str:slug>',views.get_profile,name='user_profile'),
 ]

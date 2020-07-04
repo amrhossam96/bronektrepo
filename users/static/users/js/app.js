@@ -131,8 +131,9 @@ function hookUpBtns() {
       postData("/user/api/searchusers", searchData).then((response) => {
         let _html = "";
         response.forEach((elem) => {
+          console.log(elem);
           let elementTemplate = `
-                <div class="entity-placeholder">
+                <div class="entity-placeholder" onclick="entityClicked(this)">
     <div class="tweet-container-left-col">
         <div class="tweet-author-picture-container">
             <img src="https://holmesbuilders.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png" alt="" class="profile-header-img">
@@ -140,6 +141,7 @@ function hookUpBtns() {
     </div>
     <div class="tweet-container-right-col">
         <div class="tweet-card-header">
+            <span class="slug" hidden>${elem['slug']}</span>
             <div class="tweet-author-display-name">${elem["display_name"]}</div>
         </div>     
     </div>
@@ -150,6 +152,10 @@ function hookUpBtns() {
       });
     }
   });
+
+
+  
+
 
   insertEmojiIcon.addEventListener("click", () => {
     if (!document.querySelector(".emoji-div")) {
@@ -480,17 +486,33 @@ function getBrocodes(timestamp) {
 }
 
 
+function entityClicked(entity){
+  let slug = entity.querySelector('.slug').innerText;
+  fetch(`/user/api/profile/${slug}`)
+    .then((response) => response.json())
+    .then((data) => {
+      showProfile(data);
+    });
+}
+
+
+function showProfile(){
+  let searchPage = document.querySelector('.search');
+  let profile = document.createElement('div');
+  profile.setAttribute('class','profile-screen');
+  searchPage.appendChild(profile);
+}
 
 function startTimeLine(){
-  window.setInterval(()=>{
-    let timeline = document.querySelector(".newfeeds-container");
-    let latestBrocode = timeline.firstElementChild;
-    if(latestBrocode){
-      let queryTimestamp = latestBrocode.querySelector('.brocode-time').textContent;
-      getBrocodes(queryTimestamp);
-    }
-  },
-    3000);
+  // window.setInterval(()=>{
+  //   let timeline = document.querySelector(".newfeeds-container");
+  //   let latestBrocode = timeline.firstElementChild;
+  //   if(latestBrocode){
+  //     let queryTimestamp = latestBrocode.querySelector('.brocode-time').textContent;
+  //     getBrocodes(queryTimestamp);
+  //   }
+  // },
+  //   3000);
 }
 
 

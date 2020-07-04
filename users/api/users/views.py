@@ -57,3 +57,10 @@ def search_users(request):
     profiles = Profile.objects.filter(display_name__startswith=search_query)
     serializer = ProfileModelSerializer(profiles,many=True)
     return JsonResponse(serializer.data,safe=False)
+
+
+def get_profile(request,slug):
+    print(slug)
+    user = Profile.objects.get(slug=slug)
+    serializer = ProfileModelSerializer(user)
+    return JsonResponse(serializer.data,safe=False)

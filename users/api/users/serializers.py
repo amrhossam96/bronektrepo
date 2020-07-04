@@ -11,8 +11,7 @@ class UserModelSerializer(serializers.ModelSerializer):
 class ProfileModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['display_name','bio','email','birthday']
-
+        fields = "__all__"
 class BroCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brocode
