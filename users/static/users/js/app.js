@@ -35,7 +35,7 @@ function hookUpBtns() {
   const insertEmojiIcon = document.getElementById("insert-emoji-icon");
   const searchInput = document.querySelector(".search-input");
   const searchFeeds = document.querySelector(".search-feeds");
-
+  
   searchInput.addEventListener("keypress", () => {
     if (searchInput.value.length > 1) {
       let searchData = {
