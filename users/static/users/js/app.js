@@ -35,7 +35,94 @@ function hookUpBtns() {
   const insertEmojiIcon = document.getElementById("insert-emoji-icon");
   const searchInput = document.querySelector(".search-input");
   const searchFeeds = document.querySelector(".search-feeds");
-  
+
+  const insertGifIcon = document.getElementById('insert-gif-icon');
+
+
+
+  insertGifIcon.addEventListener('click',()=>{
+      let search_input = document.createElement('input');
+      search_input.type = 'text';
+      search_input.placeholder = 'Search';
+      search_input.style.marginTop =  '5px';
+      search_input.style.marginBottom =  '10px';
+      search_input.setAttribute('class','search-input');
+
+      let menuDiv = document.createElement("div");
+      let gifList = document.createElement("ul");
+      menuDiv.setAttribute("class", "gif-div");
+      gifList.setAttribute("class", "gif-list");
+      fetch("https://api.giphy.com/v1/gifs/trending?api_key=Hp18gzUcD8GnldVWFbfaG7ncdmenXo7i&limit=20&rating=g",{
+          headers: {
+              'Content-Type': 'application/json',
+          }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+          let gifs = data['data'];
+          gifs.forEach(elem=>{
+              let gifPlaceholder = document.createElement('img');
+              gifPlaceholder.src = elem['images']['fixed_width']['url'];
+              gifPlaceholder.style.height = '10px;'
+              gifPlaceholder.setAttribute('class','gif-list-item');
+              gifList.appendChild(gifPlaceholder);
+          });
+        
+          menuDiv.appendChild(search_input);
+          menuDiv.appendChild(gifList);
+          newFeedsContainer.insertAdjacentElement("beforebegin", menuDiv);
+          let ca = document.querySelector(".brocode-composing-area");
+          ca.style.borderBottomRightRadius = "0px";
+          ca.style.borderBottomLeftRadius = "0px";
+
+      });
+
+      search_input.addEventListener('change',()=>{
+
+          console.log(getCookie('http://giphy.com/'));
+          console.log(document.cookie)
+
+          if(search_input.value.length > 1){
+
+
+              fetch(`https://api.giphy.com/v1/gifs/search?api_key=Hp18gzUcD8GnldVWFbfaG7ncdmenXo7i&q=${search_input.value}&limit=25&offset=0&rating=g&lang=en`,{
+          headers: {
+              'Content-Type': 'application/json',
+          }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+
+
+          var child = gifList.lastElementChild;  
+      while (child) { 
+          gifList.removeChild(child); 
+          child = gifList.lastElementChild; 
+      } 
+
+
+          let gifs = data['data'];
+          gifs.forEach(elem=>{
+              let gifPlaceholder = document.createElement('img');
+              gifPlaceholder.src = elem['images']['fixed_width']['url'];
+              gifPlaceholder.style.height = '10px;'
+              gifList.appendChild(gifPlaceholder);
+          });
+          
+          menuDiv.appendChild(search_input);
+          menuDiv.appendChild(gifList);
+          newFeedsContainer.insertAdjacentElement("beforebegin", menuDiv);
+          let ca = document.querySelector(".brocode-composing-area");
+          ca.style.borderBottomRightRadius = "0px";
+          ca.style.borderBottomLeftRadius = "0px";
+
+      });
+
+          }
+      });
+
+  });
+
   searchInput.addEventListener("keypress", () => {
     if (searchInput.value.length > 1) {
       let searchData = {
