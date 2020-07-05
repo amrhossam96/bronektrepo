@@ -1,0 +1,1 @@
+web: gunicorn bronekt.wsgi --log-file -

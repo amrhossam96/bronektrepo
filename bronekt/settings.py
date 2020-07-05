@@ -25,7 +25,7 @@ SECRET_KEY = '_ryv0^-q$qwpe%0zmpt5hafy^fs6=u$c2jun7&d(cvefbs9&it'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.3']
+ALLOWED_HOSTS = ['bronektlive.herokuapp.com','127.0.0.1']
 
 
 # Application definition
