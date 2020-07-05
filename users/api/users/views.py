@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 import json
 from .serializers import ProfileModelSerializer, BroCodeSerializer
-from  ...models  import Profile, Brocode, Timeline
+from  ...models  import Profile, Brocode, Timeline, Following, Follower
 import time, datetime
 
 def response(request):
@@ -19,6 +19,12 @@ def post_brocode(request):
         brocode.save()
         personal_timeline = Timeline.objects.get(owner=brocode_author.profile)
         personal_timeline.brocodes_list.add(Brocode.objects.get(id=brocode.id))
+        followers_list = Follower.objects.get(profile=brocode_author.profile)
+        followers_list = followers_list.followers.all()
+        if(len(followers_list)>0):
+            for follower in followers_list:
+                target_timeline = Timeline.objects.get(owner=follower)
+                target_timeline.brocodes_list.add(Brocode.objects.get(id=brocode.id))
         serializer = BroCodeSerializer(brocode)
         response = serializer.data
         response['author'] = request.user.username
@@ -30,13 +36,17 @@ def get_brocodes(request, timestamp):
 
         datetime_ = datetime.datetime.fromtimestamp(float(timestamp)/1000)
         personal_timeline = Timeline.objects.get(owner=request.user.profile)
-        retrived_brocodes = personal_timeline.brocodes_list.all().order_by('-created')[:30]
+        retrived_brocodes = personal_timeline.brocodes_list.all().order_by('-created').exclude(author=request.user.profile)[:30]
         filtered_brocodes = []
         for bc in retrived_brocodes:
             if(int(bc.created.timestamp()) > int(timestamp)):
-                print(bc.created.timestamp())
                 filtered_brocodes.append(bc)
+        
+        
         serializer = BroCodeSerializer(filtered_brocodes, many=True)
+        for s in serializer.data:
+            s['author'] = Brocode.objects.get(id=s['id']).author.user.username
+            s['author-display-name'] = Brocode.objects.get(id=s['id']).author.display_name
         return JsonResponse(serializer.data,safe=False)
 
 def like_brocode(request, brocode_id):
@@ -63,4 +73,17 @@ def get_profile(request,slug):
     print(slug)
     user = Profile.objects.get(slug=slug)
     serializer = ProfileModelSerializer(user)
-    return JsonResponse(serializer.data,safe=False)
+    response = serializer.data
+    response['username'] = user.user.username
+    print(response)
+    return JsonResponse(response,safe=False)
+
+def commit_follow(request,slug):
+    sender_profile = request.user.profile
+    receiver_profile = Profile.objects.get(slug=slug)
+    following_list = Following.objects.get(profile=sender_profile)
+    following_list.follows.add(receiver_profile)
+    followers_list = Follower.objects.get(profile=receiver_profile)
+    followers_list.followers.add(sender_profile)
+    response = {"message":"Success"}
+    return JsonResponse(json.dumps(response),safe=False)

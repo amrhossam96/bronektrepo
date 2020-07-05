@@ -63,9 +63,25 @@ class Following(models.Model):
         return self.profile.display_name +" Follows"
 
 
+
+@receiver(post_save,sender=Profile)
+def create_following_list(sender,instance,created,**kwargs):
+    if created:
+        following_list = Following(profile=instance)
+        following_list.save()   
+
+
+
 class Follower(models.Model):
     profile     = models.ForeignKey(Profile, on_delete=models.CASCADE)
     followers  = models.ManyToManyField(Profile, related_name='followers_list')
 
     def __str__(self):
         return self.profile.display_name +" Followers List"
+
+@receiver(post_save,sender=Profile)
+def create_follower_list(sender,instance,created,**kwargs):
+    if created:
+        followers_list = Follower(profile=instance)
+        followers_list.save()   
+

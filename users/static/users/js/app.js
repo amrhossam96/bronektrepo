@@ -79,8 +79,6 @@ function hookUpBtns() {
 
       search_input.addEventListener('change',()=>{
 
-          console.log(getCookie('http://giphy.com/'));
-          console.log(document.cookie)
 
           if(search_input.value.length > 1){
 
@@ -131,7 +129,6 @@ function hookUpBtns() {
       postData("/user/api/searchusers", searchData).then((response) => {
         let _html = "";
         response.forEach((elem) => {
-          console.log(elem);
           let elementTemplate = `
                 <div class="entity-placeholder" onclick="entityClicked(this)">
     <div class="tweet-container-left-col">
@@ -396,7 +393,7 @@ function createNewBrocode(brocode) {
         <div class="tweet-content">
             <p class="tweet-content-p">${brocode["brocode_body"]}</p>
         </div>
-        <span hidden class="brocode-time">${new Date(brocode['created']).getTime()}</span>
+        <span hidden class="brocode-time">${new Date(brocode['created']).getTime()/1000}</span>
         <ul class="brocodes-action-btns">
             <li class="brocode-action-btn"><span class="material-icons action-icon">reply</span></li><!--
             --><li class="brocode-action-btn"><span class="material-icons action-icon">thumbs_up_down</span></li><!--
@@ -477,10 +474,17 @@ function getBrocodes(timestamp) {
   fetch(`/user/api/get_brocodes/${parseInt(timestamp)}`)
     .then((response) => response.json())
     .then((data) => {
+      let newFeedsContainer = document.querySelector(".newfeeds-container");
       if(data.length>0){
-        console.log(data);
-      }else{
-        console.log("No new brocodes");
+        data.forEach(brocode =>{
+        let brocodeDiv = document.createElement("div");
+        brocodeDiv.setAttribute("class", "tweet");
+        brocodeDiv.innerHTML = createNewBrocode(brocode);
+        newFeedsContainer.insertAdjacentElement(
+          "afterbegin",
+          brocodeDiv.cloneNode(true)
+        );
+      });
       }
     });
 }
@@ -496,23 +500,85 @@ function entityClicked(entity){
 }
 
 
-function showProfile(){
+function showProfile(data){
   let searchPage = document.querySelector('.search');
   let profile = document.createElement('div');
   profile.setAttribute('class','profile-screen');
+  let profileScreenHtml = `
+  <div class="profile-header">
+  <div class="profile-header-placeholder">
+      <img src="https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="profile-header-img" class="profile-header-img">
+  </div>
+  <div class="profile-card">
+          <div id="profile-options">
+              <div class="option-dots noselect"></div>
+              <div class="option-dots noselect"></div>
+              <div class="option-dots noselect"></div>
+          </div>
+          <div class="profile-card-left">
+              <div class="profile-picture-placeholder">
+                  <img src="https://holmesbuilders.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png" alt="profile-picture" class="profile-picture-content">
+              </div>
+              <div class="action-btns">
+                  <button class="action-btn follow" onclick="commitFollow(this)" value="${data['username']}">Follow</button>
+              </div>
+          </div>
+
+          <div class="profile-card-right">
+              <h1 class="display-name">
+                  ${data['display_name']}
+              </h1>
+              <h2 class="user-name">@${data['username']}</h2>
+              <h4 class="user-bio">${data['bio']}</h4>
+              <ul class="user-info">
+                  <li class="info-li red">BroCodes</li>
+                  <li class="info-li red">Bros</li>
+                  <li class="info-li red">Fellows</li>
+              </ul>
+              <ul class="user-info">
+                  <li class="info-li">10</li>
+                  <li class="info-li">200</li>
+                  <li class="info-li">3000</li>
+              </ul>
+          </div>
+  </div>
+</div>
+<div class="timeline">
+</div>
+  `
+  profile.innerHTML = profileScreenHtml;
   searchPage.appendChild(profile);
+
+  setTimeout(() => {
+    profile.style.transition = 'top 0.4s';
+    profile.style.top = '0vh';
+  }, 30);
 }
 
+function commitFollow(intent){
+  fetch(`/user/api/commit_follow/${intent.value}`)
+  .then(response => response.json())
+  .then(response =>{
+  });
+}
+
+
+
+
 function startTimeLine(){
-  // window.setInterval(()=>{
-  //   let timeline = document.querySelector(".newfeeds-container");
-  //   let latestBrocode = timeline.firstElementChild;
-  //   if(latestBrocode){
-  //     let queryTimestamp = latestBrocode.querySelector('.brocode-time').textContent;
-  //     getBrocodes(queryTimestamp);
-  //   }
-  // },
-  //   3000);
+  window.setInterval(()=>{
+    let timeline = document.querySelector(".newfeeds-container");
+    let latestBrocode = timeline.firstElementChild;
+    if(latestBrocode){
+      let queryTimestamp = latestBrocode.querySelector('.brocode-time').textContent;
+      getBrocodes(queryTimestamp);
+    }
+
+    if(timeline.childNodes>30){
+      timeline.removeChild(timeline.lastChild);
+    }
+  },
+    3000);
 }
 
 

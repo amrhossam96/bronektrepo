@@ -807,8 +807,17 @@ body::-webkit-scrollbar,
 }
 
 
+.search {
+  overflow: hidden;
+}
+
 .profile-screen {
-    width: 90%;
-    height: 400px;
-    background-color: red;
+  margin: 0 auto;
+  position: fixed;
+  top: 100vh;
+  border-radius: 25px;
+  width: 100vw;
+  height: 95vh;
+  z-index: 999999999;
+  transition: top 0.3s;
 }

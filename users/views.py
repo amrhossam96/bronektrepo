@@ -63,7 +63,7 @@ def home(request):
         return redirect('register')
 
     timeline = Timeline.objects.get(owner=request.user.profile)
-    brocodes = timeline.brocodes_list.all().order_by('-created')[:3]
+    brocodes = timeline.brocodes_list.all().order_by('-created')[:10]
     # brocodes = user.profile.brocode_set.all().order_by('-created')[:3]
 
     context = {"brocodes":brocodes}

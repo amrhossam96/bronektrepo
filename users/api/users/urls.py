@@ -10,4 +10,5 @@ urlpatterns = [
     path('unlike_brocodes/<int:brocode_id>',views.unlike_brocode,name='unlike_response'),
     path('searchusers',views.search_users,name='search_users'),
     path('profile/<str:slug>',views.get_profile,name='user_profile'),
+    path('commit_follow/<str:slug>',views.commit_follow,name='user_profile'),
 ]
